@@ -1,0 +1,71 @@
+Paso 1 ESTRUCTURA INICIAL
+    Crear la estructura y separar Front y End
+    FRONT
+    Crear la estructura en cada uno y partir con vite+React en el front para lograr integrar las pre configuraciones
+        cd CLIENT
+        npm create vite@latest .   React   Javascript el punto es para instalar dentro de la carpeta CLIENT
+    Intalar dependencias del front
+    # Router para navegación 
+        npm install react-router-dom 
+    # Bootstrap y React Bootstrap para estilos (nota:importarlos en app.jsx)
+        npm install bootstrap react-bootstrap 
+    # FontAwesome para íconos (nota:importarlos en app.jsx)
+        npm install @fortawesome/fontawesome-free 
+    # Axios para llamadas HTTP 
+        npm install axios
+    # Iconos de react 
+        npm install react-icons
+    BACK
+    Se crea package.json con las dependecias necesarias
+    Se instala npm para que tome todas las dependencias anteriores
+        cd SERVER
+        npm install
+
+        npm install react-icons
+
+Paso 2 FRONT
+    Importar bootstrap y fontawesome a main.jsx y usar ReactDOM
+    Crear estructura base (template) en App.jsx
+    Separar template en Navbar, Home y Footer. Utilizar Routes en app.jsx
+    Crear views de todo (Carro, usuarios ...) recordar que la extension es jsx. Nota:NavbarApp para que no choque con Navbar de bootstrap
+    Crear json de los productos (Carpeta data)
+    Nota: hay varios links que no llevan a nada y 
+    el carro es dinamico hasta cierto punto por medio de los context API que almacenan la informacion y lo distribuyen por el contextProvider
+        const [carroItems, setCarroItems] = useState([]);
+        carroItems es el array de productos/servicios en el carro, todo se guarda aqui, agregar, restar, etc.
+        setCarroItems es la función que actualiza ese estado
+
+Paso 3 DATABASE
+    Se crea el archivo schema.sql para crear las tablas
+    Conectar con base de datos
+    Conectar usuarios login con base de datos
+        ingreso.js enviar email y password con fetch
+        Y crear la ruta del login (hacer la peticion, no toca base de datos)
+        En SERVER se crea un controlador de auth (auth.controller.js)
+        DB conecta con base de datos
+        agregarlo al index del back
+    Crear usuarios y editar usuarios
+        Crear cuenta toma los usuarios de form y los envia
+        ruta en routes 
+        se agrega controlador donde consulta base de datos
+    Proteger con JWT
+        Crear controlador, lgoica con usuario y correo y su expiracion
+        Crear el middleware para filtrar si el usuario pasa o no
+        Se crea la ruta protegida
+        .env con clave maestra
+
+        npm install cors
+        npm install bcryptjs
+
+LOGIN
+    Modificar tabla con hash y rol
+    de crearcuenta almacenar json y modificar usuario para que lo reciba y logearse automaticamente (no lo pude hacer, consultar esto último)
+
+Paso 4 Cambiar a que todo apunta a la base de datos
+    Favoritos, con tabla
+    mis Favoritos page
+    Productos y servicios.js para llamarlos, tablas introducidas por sql, y que sean llamados desde el backend
+    configurar rutas para ñas ventas, que guarde y limpie el carro, ademas que Success pueda obtener los datos
+
+
+falta page de clientes, venta y productos de superadmin
