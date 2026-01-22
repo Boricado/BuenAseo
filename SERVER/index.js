@@ -9,6 +9,7 @@ import productosRoutes from "./routes/productos.js"
 import serviciosRoutes from "./routes/servicios.js"
 import dotenv from "dotenv"
 import ventasRoutes from "./routes/ventas.js"
+import usuariosRoutes from "./routes/usuarios.routes.js"
 
 const app = express()
 const PORT = 3000
@@ -23,6 +24,7 @@ app.use(cors({
 }))
 app.use(express.json())
 
+
 // Rutas
 app.use("/api", authRoutes)
 app.use("/api/favoritos", verificarToken, favoritosRoutes)
@@ -30,6 +32,7 @@ app.use("/api/carrito", verificarToken, carritoRoutes)
 app.use("/api/productos", productosRoutes)
 app.use("/api/servicios", serviciosRoutes)
 app.use("/api/ventas", ventasRoutes)
+app.use("/api/usuarios", usuariosRoutes)
 
 // Ruta test
 app.get("/", (req, res) => {
@@ -50,4 +53,4 @@ app.listen(PORT, () => {
   console.log(`Back corriendo en http://localhost:${PORT}`)
 })
 
-app.use("/api/favoritos", verificarToken, favoritosRoutes)
+export default app //Para Tests

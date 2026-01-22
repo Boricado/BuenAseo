@@ -5,6 +5,6 @@ const router = express.Router()
 
 router.post("/register", register)
 router.post("/login", login)
-router.put("/usuarios/:id", updateUser)
+
 
 export default router

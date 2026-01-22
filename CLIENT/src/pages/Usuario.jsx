@@ -79,9 +79,9 @@ function Usuario() {
             {usuario.rol === "Super" && (
               <>
                 <ListGroup.Item className="fw-bold mt-3 bg-light">Panel Admin</ListGroup.Item>
-                <ListGroup.Item action>Clientes</ListGroup.Item>
-                <ListGroup.Item action>Ventas</ListGroup.Item>
-                <ListGroup.Item action>Productos</ListGroup.Item>
+                <ListGroup.Item action onClick={() => navigate("/Clientes")}>Clientes</ListGroup.Item>
+                <ListGroup.Item action onClick={() => navigate("/Ventas")}>Ventas</ListGroup.Item>
+                <ListGroup.Item action onClick={() => navigate("/Productos")}>Productos</ListGroup.Item>
               </>
             )}
           </ListGroup>

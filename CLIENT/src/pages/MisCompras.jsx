@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Container, Row, Col, Card, ListGroup, Spinner, Alert } from "react-bootstrap"
+import { Container, Row, Col, Card, ListGroup, Spinner, Alert, Badge } from "react-bootstrap"
 
 function MisCompras() {
   const [compras, setCompras] = useState([])
@@ -12,7 +12,7 @@ function MisCompras() {
         const token = localStorage.getItem("token")
         const res = await fetch("http://localhost:3000/api/ventas/mis-compras", {
           headers: {
-            "Authorization": `Bearer ${token}`
+            Authorization: `Bearer ${token}`
           }
         })
 
@@ -32,6 +32,23 @@ function MisCompras() {
 
     fetchCompras()
   }, [])
+
+  const colorEstado = (estado) => {
+    switch (estado) {
+      case "Pendiente":
+        return "warning"
+      case "Pagado":
+        return "info"
+      case "Enviado":
+        return "primary"
+      case "Entregado":
+        return "success"
+      case "Cancelado":
+        return "danger"
+      default:
+        return "secondary"
+    }
+  }
 
   if (loading) {
     return (
@@ -58,42 +75,56 @@ function MisCompras() {
     )
   }
 
-    return (
-        <Container className="py-4">
-        <h3 className="mb-4">Mis Pedidos Realizados</h3>
-        <Row>
-            {compras.map((compra) => (
-            <Col lg={12} key={compra.id} className="mb-4">
-                <Card className="shadow-sm border-0">
-                <Card.Header className="bg-primary text-white d-flex justify-content-between">
-                    <span><strong>Orden Nº:</strong> {compra.id}</span>
-                    <span>{new Date(compra.fecha).toLocaleDateString("es-CL")}</span>
-                </Card.Header>
-                <Card.Body>
-                    <Row>
-                    <Col md={8}>
-                        <h6><strong>Productos / Servicios:</strong></h6>
-                        <ListGroup variant="flush">
-                        {compra.detalles.map((item, idx) => (
-                            <ListGroup.Item key={idx} className="ps-0">
-                            {item.nombre} - {item.cantidad} x ${Number(item.precio).toLocaleString("es-CL")}
-                            </ListGroup.Item>
-                        ))}
-                        </ListGroup>
-                    </Col>
-                    <Col md={4} className="text-end border-start">
-                        <p className="mb-1 text-muted">Pago: {compra.metodo_pago}</p>
-                        <p className="mb-3 text-muted">Envío: {compra.direccion}</p>
-                        <h4 className="text-primary">${Number(compra.total).toLocaleString("es-CL")}</h4>
-                    </Col>
-                    </Row>
-                </Card.Body>
-                </Card>
-            </Col>
-            ))}
-        </Row>
-        </Container>
-    )
+  return (
+    <Container className="py-4">
+      <h3 className="mb-4">Mis Pedidos Realizados</h3>
+
+      <Row>
+        {compras.map((compra) => (
+          <Col lg={12} key={compra.id} className="mb-4">
+            <Card className="shadow-sm border-0">
+              <Card.Header className="bg-primary text-white d-flex justify-content-between align-items-center">
+                <div>
+                  <strong>Orden Nº:</strong> {compra.id}
+                </div>
+
+                <div className="d-flex align-items-center gap-3">
+                  <span>{new Date(compra.fecha).toLocaleDateString("es-CL")}</span>
+                  <Badge bg={colorEstado(compra.estado)}>
+                    {compra.estado || "Sin estado"}
+                  </Badge>
+                </div>
+              </Card.Header>
+
+              <Card.Body>
+                <Row>
+                  <Col md={8}>
+                    <h6><strong>Productos / Servicios:</strong></h6>
+                    <ListGroup variant="flush">
+                      {compra.detalles.map((item, idx) => (
+                        <ListGroup.Item key={idx} className="ps-0">
+                          {item.nombre} – {item.cantidad} x $
+                          {Number(item.precio).toLocaleString("es-CL")}
+                        </ListGroup.Item>
+                      ))}
+                    </ListGroup>
+                  </Col>
+
+                  <Col md={4} className="text-end border-start">
+                    <p className="mb-1 text-muted">Pago: {compra.metodo_pago}</p>
+                    <p className="mb-3 text-muted">Envío: {compra.direccion}</p>
+                    <h4 className="text-primary">
+                      ${Number(compra.total).toLocaleString("es-CL")}
+                    </h4>
+                  </Col>
+                </Row>
+              </Card.Body>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+    </Container>
+  )
 }
 
 export default MisCompras

@@ -68,4 +68,23 @@ Paso 4 Cambiar a que todo apunta a la base de datos
     configurar rutas para ñas ventas, que guarde y limpie el carro, ademas que Success pueda obtener los datos
 
 
-falta page de clientes, venta y productos de superadmin
+Paso 5 paginas protegidas con SuperUsuario
+    Para pagina ventas agregar en la tabla columna estado, se coloca por default en SQL que sea estado pendiente
+    Se crean las rutas de los endpoints
+    Se crea pagina Clientes para editar y eliminar
+    Se crea pagina Productos, se crean andpoints para editar y eliminar, hartos problemas con el id que dejaba un espacio al final, se colocaron restricciones y no se puede editar el id
+    Todas las paginas estas como ruta protegida a admin
+
+Paso 6 Detalles
+    Añadir filtros y buscador
+    linkear todos los links rotos
+    colocar precios estilo ${Number(d.precio).toLocaleString("es-CL")}
+
+Paso 7 Test
+    en el back
+    npm install --save-dev jest supertest
+    npm install --save-dev cross-env
+    Se crea archivo app.test.js con los endpoints a testear
+    jest.config.msj
+    server.js
+    se corren los test npm test

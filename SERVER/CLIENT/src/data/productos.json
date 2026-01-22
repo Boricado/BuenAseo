@@ -1,0 +1,66 @@
+[
+  {
+    "id": "PRD-SABANAS-1P",
+    "nombre": "Juego de sábanas 1 plaza",
+    "precio": 18000,
+    "descripcion": "Juego de sábanas calidad hotelera, 180 hilos, resistente a lavados frecuentes.",
+    "stock": 12,
+    "picture": "https://cdnimg.retailrocket.net/api/1.0/partner/6217fd2c97a5250c4449ca17/item/20693/picture/?format=jpg&width=1500&height=1500&scale=both"
+  },
+  {
+    "id": "PRD-SABANAS-2P",
+    "nombre": "Juego de sábanas 2 plazas",
+    "precio": 22000,
+    "descripcion": "Juego de sábanas calidad hotelera, 180 hilos, ideal para arriendos tipo Airbnb.",
+    "stock": 10,
+    "picture": "https://cdnimg.retailrocket.net/api/1.0/partner/6217fd2c97a5250c4449ca17/item/21935/picture/?format=jpg&width=1500&height=1500&scale=both"
+  },
+  {
+    "id": "PRD-SABANAS-2P-PREMIUM",
+    "nombre": "Juego de sábanas 2 plazas premium",
+    "precio": 28000,
+    "descripcion": "Juego de sábanas 200–220 hilos, mayor suavidad y durabilidad.",
+    "stock": 8,
+    "picture": "https://cdnimg.retailrocket.net/api/1.0/partner/6217fd2c97a5250c4449ca17/item/20726/picture/?format=jpg&width=1500&height=1500&scale=both"
+  },
+  {
+    "id": "PRD-PLUMON-1P",
+    "nombre": "Plumón 1 plaza",
+    "precio": 30000,
+    "descripcion": "Plumón sintético uso todo año, fácil lavado.",
+    "stock": 6,
+    "picture": "https://cdnimg.retailrocket.net/api/1.0/partner/6217fd2c97a5250c4449ca17/item/22782/picture/?format=jpg&width=1500&height=1500&scale=both"
+  },
+  {
+    "id": "PRD-PLUMON-2P",
+    "nombre": "Plumón 2 plazas",
+    "precio": 35000,
+    "descripcion": "Plumón sintético uso todo año, recomendado para arriendos.",
+    "stock": 6,
+    "picture": "https://cdnimg.retailrocket.net/api/1.0/partner/6217fd2c97a5250c4449ca17/item/15433/picture/?format=jpg&width=1500&height=1500&scale=both"
+  },
+  {
+    "id": "PRD-ALMOHADA",
+    "nombre": "Almohada hotelera",
+    "precio": 20000,
+    "descripcion": "Almohada firme, uso hotelero, alta durabilidad.",
+    "stock": 20,
+    "picture": "https://cdnimg.retailrocket.net/api/1.0/partner/6217fd2c97a5250c4449ca17/item/460/picture/?format=jpg&width=1500&height=1500&scale=both"
+  },
+  {
+    "id": "PRD-TOALLA-BANO",
+    "nombre": "Toalla de baño",
+    "precio": 8000,
+    "descripcion": "Toalla de algodón, gramaje medio, uso hotelero.",
+    "stock": 30,
+    "picture": "https://cdnimg.retailrocket.net/api/1.0/partner/6217fd2c97a5250c4449ca17/item/19961/picture/?format=jpg&width=1500&height=1500&scale=both"
+  },
+  {
+    "id": "PRD-TOALLA-MANO",
+    "nombre": "Toalla de mano",
+    "precio": 4000,
+    "descripcion": "Toalla de mano de algodón, a juego con toalla de baño.",
+    "stock": 30,
+    "picture": "https://cdnimg.retailrocket.net/api/1.0/partner/6217fd2c97a5250c4449ca17/item/6332/picture/?format=jpg&width=1500&height=1500&scale=both"
+  }
+]

@@ -143,7 +143,7 @@ function Home() {
                             : item.descripcion}
                         </Card.Text>
                         <p className="fw-bold text-primary fs-4">
-                          ${item.precio?.toLocaleString("es-CL")}
+                          ${Number(item.precio).toLocaleString("es-CL")}
                         </p>
 
                         <div className="d-flex justify-content-center gap-2">

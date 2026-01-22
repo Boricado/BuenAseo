@@ -15,7 +15,7 @@ function ProtectedRoute({ children, rol }) {
 
   // No hay sesión
   if (!usuario) {
-    return <Navigate to="/ingresar" replace />
+    return <Navigate to="/Ingresar" replace />
   }
 
   // Hay rol requerido y no coincide

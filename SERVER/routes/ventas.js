@@ -21,9 +21,9 @@ router.post("/checkout", verificarToken, async (req, res) => {
 
         // Cabecera de ventas
         const ventaRes = await client.query(
-            `INSERT INTO ventas (usuario_id, nombre_cliente, direccion, metodo_pago, total) 
-             VALUES ($1, $2, $3, $4, $5) RETURNING id`,
-            [usuario_id, nombre, direccion, metodo_pago, totalEntero]
+            `INSERT INTO ventas (usuario_id, nombre_cliente, direccion, metodo_pago, total, estado) 
+             VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`,
+            [usuario_id, nombre, direccion, metodo_pago, totalEntero, "Pendiente"]
         )
         const ventaId = ventaRes.rows[0].id
 
@@ -53,33 +53,164 @@ router.post("/checkout", verificarToken, async (req, res) => {
 
 // MIS COMPRAS
 router.get("/mis-compras", verificarToken, async (req, res) => {
-    try {
-        const usuario_id = req.usuario.id
-        const query = `
-            SELECT 
-                v.id, 
-                v.fecha, 
-                v.total, 
-                v.metodo_pago,
-                v.direccion,
-                json_agg(json_build_object(
-                    'nombre', COALESCE(p.nombre, s.nombre),
-                    'cantidad', vd.cantidad,
-                    'precio', vd.precio_unitario
-                )) AS detalles
-            FROM ventas v
-            JOIN ventas_detalle vd ON v.id = vd.venta_id
-            LEFT JOIN productos p ON vd.item_id = p.id
-            LEFT JOIN servicios s ON vd.item_id = s.id
-            WHERE v.usuario_id = $1
-            GROUP BY v.id
-            ORDER BY v.fecha DESC
-        `
-        const result = await pool.query(query, [usuario_id])
-        res.json({ ok: true, compras: result.rows })
-    } catch (error) {
-        res.status(500).json({ ok: false, error: "Error al obtener historial" })
+  try {
+    const usuario_id = req.usuario.id
+
+    const query = `
+      SELECT 
+        v.id, 
+        v.fecha, 
+        v.total, 
+        v.metodo_pago,
+        v.direccion,
+        v.estado,
+        json_agg(
+          json_build_object(
+            'nombre', COALESCE(p.nombre, s.nombre),
+            'cantidad', vd.cantidad,
+            'precio', vd.precio_unitario
+          )
+        ) AS detalles
+      FROM ventas v
+      JOIN ventas_detalle vd ON v.id = vd.venta_id
+      LEFT JOIN productos p ON vd.item_id = p.id
+      LEFT JOIN servicios s ON vd.item_id = s.id
+      WHERE v.usuario_id = $1
+      GROUP BY v.id
+      ORDER BY v.fecha DESC
+    `
+
+    const result = await pool.query(query, [usuario_id])
+
+    res.json({ ok: true, compras: result.rows })
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      error: "Error al obtener historial"
+    })
+  }
+})
+
+
+// VER LAS VENTAS REALIZADAS POR LOS CLIENTES (SOLO SUPER)
+router.get("/", verificarToken, async (req, res) => {
+  try {
+    let query = `
+      SELECT 
+        v.id,
+        v.fecha,
+        v.total,
+        v.metodo_pago,
+        v.direccion,
+        v.estado,
+        u.nombre AS cliente,
+        COALESCE(
+          json_agg(
+            json_build_object(
+              'producto', COALESCE(p.nombre, s.nombre),
+              'cantidad', vd.cantidad,
+              'precio', vd.precio_unitario
+            )
+          ) FILTER (WHERE vd.id IS NOT NULL),
+          '[]'
+        ) AS detalle
+      FROM ventas v
+      JOIN usuarios u ON u.id = v.usuario_id
+      LEFT JOIN ventas_detalle vd ON vd.venta_id = v.id
+      LEFT JOIN productos p ON vd.item_id = p.id
+      LEFT JOIN servicios s ON vd.item_id = s.id
+    `
+
+    let params = []
+
+    if (req.usuario.rol === "Cliente") {
+      query += " WHERE v.usuario_id = $1"
+      params.push(req.usuario.id)
     }
+
+    query += " GROUP BY v.id, u.nombre ORDER BY v.fecha DESC"
+
+    const result = await pool.query(query, params)
+
+    res.json({ ok: true, ventas: result.rows })
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message })
+  }
+})
+
+
+router.get("/:id", verificarToken, async (req, res) => {
+  try {
+    const { id } = req.params
+
+    const query = `
+      SELECT 
+        v.id,
+        v.fecha,
+        v.total,
+        v.estado,
+        v.metodo_pago,
+        v.direccion,
+        json_agg(
+          json_build_object(
+            'nombre', COALESCE(p.nombre, s.nombre),
+            'cantidad', vd.cantidad,
+            'precio', vd.precio_unitario
+          )
+        ) AS detalles
+      FROM ventas v
+      JOIN ventas_detalle vd ON v.id = vd.venta_id
+      LEFT JOIN productos p ON vd.item_id = p.id
+      LEFT JOIN servicios s ON vd.item_id = s.id
+      WHERE v.id = $1
+      GROUP BY v.id
+    `
+
+    const result = await pool.query(query, [id])
+
+    res.json({
+      ok: true,
+      venta: result.rows[0]
+    })
+
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      error: "Error al obtener venta"
+    })
+  }
+})
+
+router.put("/:id/estado", verificarToken, async (req, res) => {
+  try {
+    const { id } = req.params
+    const { estado } = req.body
+
+    const estadosPermitidos = ["Pendiente", "Pagado", "En proceso", "Entregado", "Cancelado"]
+
+    if (!estadosPermitidos.includes(estado)) {
+      return res.status(400).json({
+        ok: false,
+        error: "Estado inválido"
+      })
+    }
+
+    await pool.query(
+      `UPDATE ventas SET estado = $1 WHERE id = $2`,
+      [estado, id]
+    )
+
+    res.json({
+      ok: true,
+      msg: "Estado actualizado"
+    })
+
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      error: "Error al actualizar estado"
+    })
+  }
 })
 
 export default router

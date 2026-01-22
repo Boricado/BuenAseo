@@ -16,7 +16,7 @@ function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/MisPedidos" className="text-white text-decoration-none">
+                <Link to="/MisCompras" className="text-white text-decoration-none">
                   Estado del pedido
                 </Link>
               </li>

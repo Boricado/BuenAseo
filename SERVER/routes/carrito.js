@@ -24,7 +24,6 @@ router.get("/", verificarToken, async (req, res) => {
       [req.usuario.id]
     )
     
-    // IMPORTANTE: Mapeamos para que el frontend reciba "id" en lugar de "item_id"
     const itemsFormateados = result.rows.map(row => ({
       ...row,
       id: row.item_id // React espera item.id para las keys y funciones
