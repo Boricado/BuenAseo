@@ -57,11 +57,11 @@ export default function ServicioForm({ servicioEdit, onFinish }) {
       console.log("2. Datos a enviar:", payload)
 
       if (servicioEdit) {
-        console.log("3. PUT /servicios/" + idLimpio)
-        await api.put(`/servicios/${idLimpio}`, payload)
+        console.log("3. PUT /api/servicios/" + idLimpio)
+        await api.put(`/api/servicios/${idLimpio}`, payload)
       } else {
-        console.log("3. POST /servicios")
-        await api.post("/servicios", payload)
+        console.log("3. POST /api/servicios")
+        await api.post("/api/servicios", payload)
       }
 
       alert("Operación exitosa")

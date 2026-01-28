@@ -61,11 +61,11 @@ export default function ProductoForm({ productoEdit, onFinish }) {
       console.log("2. Datos a enviar:", payload)
 
       if (productoEdit) {
-        console.log("3. PUT /productos/" + idLimpio)
-        await api.put(`/productos/${idLimpio}`, payload)
+        console.log("3. PUT /api/productos/" + idLimpio)
+        await api.put(`/api/productos/${idLimpio}`, payload)
       } else {
-        console.log("3. POST /productos")
-        await api.post("/productos", payload)
+        console.log("3. POST /api/productos")
+        await api.post("/api/productos", payload)
       }
 
       alert("Operación exitosa")
