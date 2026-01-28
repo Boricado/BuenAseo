@@ -12,7 +12,7 @@ import ventasRoutes from "./routes/ventas.js"
 import usuariosRoutes from "./routes/usuarios.routes.js"
 
 const app = express()
-const PORT = 3000
+const PORT = 5432
 
 dotenv.config()
 
@@ -36,7 +36,7 @@ app.use("/api/usuarios", usuariosRoutes)
 
 // Ruta test
 app.get("/", (req, res) => {
-  res.send("Back vivo,")
+  res.send("Back vivo!")
 })
 
 // Test DB
@@ -50,7 +50,7 @@ app.get("/db", async (req, res) => {
 })
 
 app.listen(PORT, () => {
-  console.log(`Back corriendo en http://localhost:${PORT}`)
+  console.log(`Back corriendo en Render`)
 })
 
 export default app //Para Tests
