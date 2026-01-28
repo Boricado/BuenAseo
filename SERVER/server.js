@@ -1,7 +1,7 @@
 import app from "./index.js"
 
-const PORT = 5432
+const PORT = process.env.PORT || 3000
 
 app.listen(PORT, () => {
-  console.log(`Back corriendo`)
+  console.log(`Backend corriendo en puerto ${PORT}`)
 })
