@@ -20,7 +20,7 @@ function CarroCheckout() {
     const token = localStorage.getItem("token")
 
     try {
-      const response = await fetch("http://localhost:3000/api/ventas/checkout", {
+      const response = await fetch("https://buenaseo.onrender.com/api/ventas/checkout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

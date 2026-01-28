@@ -12,7 +12,7 @@ function Ventas() {
 
   const cargarVentas = async () => {
     try {
-      const res = await fetch("http://localhost:3000/api/ventas", {
+      const res = await fetch("https://buenaseo.onrender.com/api/ventas", {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -36,7 +36,7 @@ function Ventas() {
   const cambiarEstado = async (id, nuevoEstado) => {
     try {
       const res = await fetch(
-        `http://localhost:3000/api/ventas/${id}/estado`,
+        `https://buenaseo.onrender.com/api/ventas/${id}/estado`,
         {
           method: "PUT",
           headers: {

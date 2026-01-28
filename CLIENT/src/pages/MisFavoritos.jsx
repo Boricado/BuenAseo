@@ -14,7 +14,7 @@ function MisFavoritos() {
     const fetchFavoritos = async () => {
       try {
         const token = localStorage.getItem("token")
-        const res = await fetch("http://localhost:3000/api/favoritos", {
+        const res = await fetch("https://buenaseo.onrender.com/api/favoritos", {
           headers: {
             "Authorization": `Bearer ${token}`
           }
@@ -40,7 +40,7 @@ function MisFavoritos() {
   const eliminarFavorito = async (itemId) => {
     const token = localStorage.getItem("token")
     try {
-      const res = await fetch(`http://localhost:3000/api/favoritos/${itemId}`, {
+      const res = await fetch(`https://buenaseo.onrender.com/api/favoritos/${itemId}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${token}` }
       })

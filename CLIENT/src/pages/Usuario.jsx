@@ -36,7 +36,7 @@ function Usuario() {
   const handleGuardar = async () => {
     try {
       const token = localStorage.getItem("token")
-      const res = await fetch(`http://localhost:3000/api/usuarios/${usuario.id}`, {
+      const res = await fetch(`https://buenaseo.onrender.com/api/usuarios/${usuario.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

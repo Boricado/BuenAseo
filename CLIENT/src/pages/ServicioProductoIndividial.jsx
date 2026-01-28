@@ -27,7 +27,7 @@ function ServicioProductoIndividual() {
         // Determinar si es producto o servicio según el prefijo del ID
         const folder = id.startsWith("PRD") ? "productos" : "servicios"
         
-        const res = await fetch(`http://localhost:3000/api/${folder}/${id}`)
+        const res = await fetch(`https://buenaseo.onrender.com/api/${folder}/${id}`)
         
         if (res.ok) {
           const data = await res.json()
@@ -36,7 +36,7 @@ function ServicioProductoIndividual() {
           // Verificar si el usuario tiene este item en favoritos
           const token = localStorage.getItem("token")
           if (token) {
-            const resFav = await fetch(`http://localhost:3000/api/favoritos/check/${id}`, {
+            const resFav = await fetch(`https://buenaseo.onrender.com/api/favoritos/check/${id}`, {
               headers: { "Authorization": `Bearer ${token}` }
             })
             if (resFav.ok) {
@@ -69,7 +69,7 @@ function ServicioProductoIndividual() {
 
     try {
       const metodo = esFavorito ? "DELETE" : "POST"
-      const res = await fetch(`http://localhost:3000/api/favoritos/${id}`, {
+      const res = await fetch(`https://buenaseo.onrender.com/api/favoritos/${id}`, {
         method: metodo,
         headers: { 
           "Authorization": `Bearer ${token}`,

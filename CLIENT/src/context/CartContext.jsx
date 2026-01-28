@@ -12,7 +12,7 @@ export const CartProvider = ({ children }) => {
     if (!activeToken) return;
 
     try {
-      const res = await fetch("http://localhost:3000/api/carrito", {
+      const res = await fetch("https://buenaseo.onrender.com/api/carrito", {
         headers: { "Authorization": `Bearer ${activeToken}` }
       })
       const data = await res.json()
@@ -41,7 +41,7 @@ export const CartProvider = ({ children }) => {
       // Determinamos el tipo basándonos en el ID (PRD o SVC) Logica de Servicio y productos
       const tipo = item.id.startsWith("PRD") ? "Producto" : "Servicio"
       
-      const res = await fetch("http://localhost:3000/api/carrito", {
+      const res = await fetch("https://buenaseo.onrender.com/api/carrito", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -66,7 +66,7 @@ export const CartProvider = ({ children }) => {
   const eliminarItem = async (itemId) => {
     const activeToken = localStorage.getItem("token")
     try {
-      const res = await fetch(`http://localhost:3000/api/carrito/${itemId}`, {
+      const res = await fetch(`https://buenaseo.onrender.com/api/carrito/${itemId}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${activeToken}` }
       })

@@ -10,7 +10,7 @@ function MisCompras() {
     const fetchCompras = async () => {
       try {
         const token = localStorage.getItem("token")
-        const res = await fetch("http://localhost:3000/api/ventas/mis-compras", {
+        const res = await fetch("https://buenaseo.onrender.com/api/ventas/mis-compras", {
           headers: {
             Authorization: `Bearer ${token}`
           }

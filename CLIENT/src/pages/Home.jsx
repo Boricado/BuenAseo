@@ -18,8 +18,8 @@ function Home() {
       try {
         setLoading(true)
         const [resProd, resServ] = await Promise.all([
-          fetch("http://localhost:3000/api/productos"),
-          fetch("http://localhost:3000/api/servicios")
+          fetch("https://buenaseo.onrender.com/api/productos"),
+          fetch("https://buenaseo.onrender.com/api/servicios")
         ])
 
         const productos = await resProd.json()
@@ -29,7 +29,7 @@ function Home() {
         // Si hay sesión activa
         if (tokenActual) {
           try {
-            const resFavs = await fetch("http://localhost:3000/api/favoritos", {
+            const resFavs = await fetch("https://buenaseo.onrender.com/api/favoritos", {
               headers: { "Authorization": `Bearer ${tokenActual}` }
             })
             const dataFavs = await resFavs.json()
@@ -66,7 +66,7 @@ function Home() {
     const metodo = esYaFavorito ? "DELETE" : "POST"
 
     try {
-      const res = await fetch(`http://localhost:3000/api/favoritos/${itemId}`, {
+      const res = await fetch(`https://buenaseo.onrender.com/api/favoritos/${itemId}`, {
         method: metodo,
         headers: { 
           "Authorization": `Bearer ${tokenCheck}`,

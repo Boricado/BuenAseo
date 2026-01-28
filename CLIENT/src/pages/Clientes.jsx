@@ -19,7 +19,7 @@ function Clientes() {
 
   // Cargar clientes
   const cargarClientes = () => {
-    fetch("http://localhost:3000/api/usuarios", {
+    fetch("https://buenaseo.onrender.com/api/usuarios", {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -67,7 +67,7 @@ function Clientes() {
 
   const guardarCambios = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/usuarios/${form.id}`, {
+      const response = await fetch(`https://buenaseo.onrender.com/api/usuarios/${form.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -100,7 +100,7 @@ function Clientes() {
 
   const eliminarCliente = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/usuarios/${clienteAEliminar.id}`, {
+      const response = await fetch(`https://buenaseo.onrender.com/api/usuarios/${clienteAEliminar.id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`

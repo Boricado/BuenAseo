@@ -21,8 +21,8 @@ function ServiciosProductos() {
         setLoading(true)
 
         const [resProd, resServ] = await Promise.all([
-          fetch("http://localhost:3000/api/productos"),
-          fetch("http://localhost:3000/api/servicios")
+          fetch("https://buenaseo.onrender.com/api/productos"),
+          fetch("https://buenaseo.onrender.com/api/servicios")
         ])
 
         const productos = await resProd.json()
@@ -34,7 +34,7 @@ function ServiciosProductos() {
         ])
 
         if (token) {
-          const resFavs = await fetch("http://localhost:3000/api/favoritos", {
+          const resFavs = await fetch("https://buenaseo.onrender.com/api/favoritos", {
             headers: { Authorization: `Bearer ${token}` }
           })
           const dataFavs = await resFavs.json()
@@ -59,7 +59,7 @@ function ServiciosProductos() {
     if (!token) return
 
     try {
-      await fetch("http://localhost:3000/api/carrito", {
+      await fetch("https://buenaseo.onrender.com/api/carrito", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -84,7 +84,7 @@ function ServiciosProductos() {
     const metodo = esFavorito ? "DELETE" : "POST"
 
     try {
-      const res = await fetch(`http://localhost:3000/api/favoritos/${itemId}`, {
+      const res = await fetch(`https://buenaseo.onrender.com/api/favoritos/${itemId}`, {
         method: metodo,
         headers: {
           Authorization: `Bearer ${token}`,
