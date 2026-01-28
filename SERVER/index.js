@@ -18,7 +18,7 @@ dotenv.config()
 
 // Middleware
 app.use(cors({
-  origin: "https://buen-aseo.vercel.app/",
+  origin: "https://buen-aseo.vercel.app",
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"] 
 }))
