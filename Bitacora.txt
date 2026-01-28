@@ -88,3 +88,9 @@ Paso 7 Test
     jest.config.msj
     server.js
     se corren los test npm test
+
+Paso 8 Hito 4
+    Crear sql exportando data
+    conectar a database (postgres) de Render y subir archivo sql
+    Crear proyecto en Render y conectar a github
+    En Vercel conectar con github y cambiar url en front services api y en back en el middleware de index.js
