@@ -16,7 +16,7 @@ export default function Productos() {
 
   const cargarProductos = async () => {
     try {
-      const { data } = await api.get("/productos")
+      const { data } = await api.get("/api/productos")
       setProductos(Array.isArray(data) ? data : [])
     } catch (e) {
       console.error(e)
@@ -24,7 +24,7 @@ export default function Productos() {
   }
 
   const cargarServicios = async () => {
-    const { data } = await api.get("/servicios")
+    const { data } = await api.get("/api/servicios")
     setServicios(data.servicios || data)
   }
 
@@ -111,7 +111,7 @@ export default function Productos() {
                       variant="danger"
                       onClick={async () => {
                         if (!confirm("¿Eliminar producto?")) return
-                        await api.delete(`/productos/${p.id}`)
+                        await api.delete(`/api/productos/${p.id}`)
                         cargarProductos()
                       }}
                     >
@@ -163,7 +163,7 @@ export default function Productos() {
                       variant="danger"
                       onClick={async () => {
                         if (!confirm("¿Eliminar servicio?")) return
-                        await api.delete(`/servicios/${s.id}`)
+                        await api.delete(`/api/servicios/${s.id}`)
                         cargarServicios()
                       }}
                     >
