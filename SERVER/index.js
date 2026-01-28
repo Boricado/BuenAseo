@@ -12,7 +12,6 @@ import ventasRoutes from "./routes/ventas.js"
 import usuariosRoutes from "./routes/usuarios.routes.js"
 
 const app = express()
-const PORT = 5432
 
 dotenv.config()
 
@@ -49,7 +48,7 @@ app.get("/db", async (req, res) => {
   }
 })
 
-app.listen(PORT, () => {
+app.listen(process.env.PORT || 3000, () => {
   console.log(`Back corriendo en Render`)
 })
 
