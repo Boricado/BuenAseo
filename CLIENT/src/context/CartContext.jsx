@@ -29,38 +29,38 @@ export const CartProvider = ({ children }) => {
     cargarCarroDesdeDB()
   }, [])
 
-  // Agregar items
   const agregarItem = async (item) => {
-    const activeToken = localStorage.getItem("token")
-    if (!activeToken) {
-      alert("Inicia sesión para usar el carrito")
-      return
-    }
+  const activeToken = localStorage.getItem("token")
+  if (!activeToken) {
+    alert("Inicia sesión para usar el carrito")
+    return
+  }
 
-    try {
-      // Determinamos el tipo basándonos en el ID (PRD o SVC) Logica de Servicio y productos
-      const tipo = item.id.startsWith("PRD") ? "Producto" : "Servicio"
-      
-      const res = await fetch("https://buenaseo.onrender.com/api/carrito", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${activeToken}`
-        },
-        body: JSON.stringify({
-          id: item.id,
-          cantidad: 1,
-          tipo: tipo
-        })
+  const cantidadAgregar = item.cantidad ?? 1
+  const tipo = item.id.startsWith("PRD") ? "Producto" : "Servicio"
+
+  try {
+    const res = await fetch("https://buenaseo.onrender.com/api/carrito", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${activeToken}`
+      },
+      body: JSON.stringify({
+        id: item.id,
+        cantidad: cantidadAgregar,
+        tipo
       })
+    })
 
-      if (res.ok) {
-        await cargarCarroDesdeDB()
-      }
-    } catch (error) {
-      console.error("Error al agregar al carrito:", error)
+    if (res.ok) {
+      await cargarCarroDesdeDB()
     }
-  };
+  } catch (error) {
+    console.error("Error al agregar al carrito:", error)
+  }
+}
+
 
   // Eliminar item
   const eliminarItem = async (itemId) => {
