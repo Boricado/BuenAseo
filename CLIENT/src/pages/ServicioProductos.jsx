@@ -52,29 +52,10 @@ function ServiciosProductos() {
     cargarDatos()
   }, [])
 
-  const manejarAgregarCarrito = async (item) => {
-    agregarItem({ ...item, cantidad: 1 })
-
-    const token = localStorage.getItem("token")
-    if (!token) return
-
-    try {
-      await fetch("https://buenaseo.onrender.com/api/carrito", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          id: item.id,
-          tipo: item.tipo,
-          cantidad: 1
-        })
-      })
-    } catch (error) {
-      console.error("Error de conexión:", error)
-    }
+  const manejarAgregarCarrito = (item) => {
+  agregarItem({ ...item, cantidad: 1 })
   }
+
 
   const toggleFavorito = async (itemId) => {
     const token = localStorage.getItem("token")
