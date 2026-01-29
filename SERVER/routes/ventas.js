@@ -199,35 +199,77 @@ router.get("/:id", verificarToken, async (req, res) => {
 })
 
 router.put("/:id/estado", verificarToken, async (req, res) => {
+  const client = await pool.connect()
   try {
     const { id } = req.params
     const { estado } = req.body
 
     const estadosPermitidos = ["Pendiente", "Pagado", "En proceso", "Entregado", "Cancelado"]
-
     if (!estadosPermitidos.includes(estado)) {
+      return res.status(400).json({ ok: false, error: "Estado inválido" })
+    }
+
+    await client.query("BEGIN")
+
+    // Obtener estado actual
+    const ventaRes = await client.query(
+      "SELECT estado FROM ventas WHERE id = $1",
+      [id]
+    )
+
+    if (ventaRes.rowCount === 0) {
+      throw new Error("Venta no encontrada")
+    }
+
+    const estadoActual = ventaRes.rows[0].estado
+
+    // Si ya está cancelada, no hacemos nada
+    if (estadoActual === "Cancelado") {
+      await client.query("ROLLBACK")
       return res.status(400).json({
         ok: false,
-        error: "Estado inválido"
+        error: "La venta ya está cancelada"
       })
     }
 
-    await pool.query(
+    // SI SE CANCELA > DEVOLVER STOCK
+    if (estado === "Cancelado") {
+      const detallesRes = await client.query(
+        `SELECT item_id, cantidad
+         FROM ventas_detalle
+         WHERE venta_id = $1`,
+        [id]
+      )
+
+      for (const item of detallesRes.rows) {
+        if (item.item_id.startsWith("PRD")) {
+          await client.query(
+            `UPDATE productos
+             SET stock = stock + $1
+             WHERE id = $2`,
+            [item.cantidad, item.item_id]
+          )
+        }
+      }
+    }
+
+    // Actualizar estado
+    await client.query(
       `UPDATE ventas SET estado = $1 WHERE id = $2`,
       [estado, id]
     )
 
-    res.json({
-      ok: true,
-      msg: "Estado actualizado"
-    })
+    await client.query("COMMIT")
+
+    res.json({ ok: true, msg: "Estado actualizado correctamente" })
 
   } catch (error) {
-    res.status(500).json({
-      ok: false,
-      error: "Error al actualizar estado"
-    })
+    await client.query("ROLLBACK")
+    res.status(500).json({ ok: false, error: error.message })
+  } finally {
+    client.release()
   }
 })
+
 
 export default router
