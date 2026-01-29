@@ -63,31 +63,37 @@ router.put("/:id", verificarToken, async (req, res) => {
   }
 })
 
-// DELETE /api/usuarios/:id - Eliminar usuario
+// DELETE /api/usuarios/:id - Desactivar usuario (soft delete)
 router.delete("/:id", verificarToken, async (req, res) => {
   try {
     const { id } = req.params
 
     const result = await pool.query(
-      "DELETE FROM usuarios WHERE id = $1 RETURNING id",
+      `
+      UPDATE usuarios
+      SET activo = false
+      WHERE id = $1 AND activo = true
+      RETURNING id
+      `,
       [id]
     )
 
-    if (result.rows.length === 0) {
+    if (result.rowCount === 0) {
       return res.status(404).json({
         ok: false,
-        error: "Usuario no encontrado"
+        error: "Usuario no existe o ya está desactivado"
       })
     }
 
     res.json({
       ok: true,
-      message: "Usuario eliminado correctamente"
+      message: "Usuario desactivado correctamente"
     })
   } catch (error) {
+    console.error(error)
     res.status(500).json({
       ok: false,
-      error: error.message
+      error: "Error al desactivar usuario"
     })
   }
 })
