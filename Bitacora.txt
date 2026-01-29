@@ -94,3 +94,4 @@ Paso 8 Hito 4
     conectar a database (postgres) de Render y subir archivo sql
     Crear proyecto en Render y conectar a github
     En Vercel conectar con github y cambiar url en front services api y en back en el middleware de index.js
+    Se corrigen points inexistentes ya que en dev perdona mucho el localhost
