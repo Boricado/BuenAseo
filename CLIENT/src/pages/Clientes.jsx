@@ -40,7 +40,9 @@ function Clientes() {
   }
 
   useEffect(() => {
-    cargarClientes()
+    if (token) {
+      cargarClientes()
+    }
   }, [token])
 
   const abrirModalEditar = (cliente) => {
@@ -78,11 +80,19 @@ function Clientes() {
         }
       )
 
-      if (response.ok) {
+      const data = await response.json()
+
+      if (response.ok && data.ok) {
         cargarClientes()
         cerrarModalEditar()
       } else {
-        alert("Error al guardar cambios")
+        if (response.status === 404) {
+          alert("El cliente ya no existe o fue desactivado")
+          cargarClientes()
+          cerrarModalEditar()
+        } else {
+          alert(data.error || "Error al guardar cambios")
+        }
       }
     } catch (error) {
       console.error(error)
@@ -113,11 +123,19 @@ function Clientes() {
         }
       )
 
-      if (response.ok) {
+      const data = await response.json()
+
+      if (response.ok && data.ok) {
         cargarClientes()
         cerrarModalDesactivar()
       } else {
-        alert("Error al desactivar cliente")
+        if (response.status === 404) {
+          alert("El cliente ya estaba desactivado o no existe")
+          cargarClientes()
+          cerrarModalDesactivar()
+        } else {
+          alert(data.error || "Error al desactivar cliente")
+        }
       }
     } catch (error) {
       console.error(error)

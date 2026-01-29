@@ -4,7 +4,7 @@ import pool from "../db/db.js"
 
 const router = express.Router()
 
-// GET /api/usuarios - Obtener todos los usuarios
+// GET /api/usuarios - Obtener todos los usuarios activos
 router.get("/", verificarToken, async (req, res) => {
   try {
     const result = await pool.query(
@@ -30,7 +30,35 @@ router.get("/perfil", verificarToken, (req, res) => {
   })
 })
 
-// PUT /api/usuarios/:id - Actualizar usuario
+// GET /api/usuarios/:id - Obtener usuario por ID (solo si está activo)
+router.get("/:id", verificarToken, async (req, res) => {
+  try {
+    const { id } = req.params
+    const result = await pool.query(
+      "SELECT id, email, nombre, direccion, telefono, rol FROM usuarios WHERE id = $1 AND activo = true",
+      [id]
+    )
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        ok: false,
+        error: "Usuario no encontrado o inactivo"
+      })
+    }
+
+    res.json({
+      ok: true,
+      usuario: result.rows[0]
+    })
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      error: error.message
+    })
+  }
+})
+
+// PUT /api/usuarios/:id - Actualizar usuario (solo si está activo)
 router.put("/:id", verificarToken, async (req, res) => {
   try {
     const { id } = req.params
@@ -39,7 +67,7 @@ router.put("/:id", verificarToken, async (req, res) => {
     const result = await pool.query(
       `UPDATE usuarios 
        SET nombre = $1, email = $2, direccion = $3, telefono = $4, rol = $5 
-       WHERE id = $6 
+       WHERE id = $6 AND activo = true
        RETURNING id, nombre, email, direccion, telefono, rol`,
       [nombre, email, direccion, telefono, rol, id]
     )
@@ -47,7 +75,7 @@ router.put("/:id", verificarToken, async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(404).json({
         ok: false,
-        error: "Usuario no encontrado"
+        error: "Usuario no encontrado o inactivo"
       })
     }
 
