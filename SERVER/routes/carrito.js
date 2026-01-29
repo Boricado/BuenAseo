@@ -95,5 +95,24 @@ router.put("/:id", verificarToken, async (req, res) => {
   }
 })
 
+// Eliminar item del carrito
+router.delete("/:id", verificarToken, async (req, res) => {
+  try {
+    const usuario_id = req.usuario.id
+    const item_id = req.params.id
+
+    await pool.query(
+      `DELETE FROM carrito 
+       WHERE usuario_id = $1 AND item_id = $2`,
+      [usuario_id, item_id]
+    )
+
+    res.json({ ok: true })
+  } catch (error) {
+    console.error("Error DELETE carrito:", error.message)
+    res.status(500).json({ ok: false })
+  }
+})
+
 
 export default router
