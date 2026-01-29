@@ -4,8 +4,9 @@ import { Container, Table, Button, Form, Modal } from "react-bootstrap"
 function Clientes() {
   const [clientes, setClientes] = useState([])
   const [show, setShow] = useState(false)
-  const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const [clienteAEliminar, setClienteAEliminar] = useState(null)
+  const [showDeactivateModal, setShowDeactivateModal] = useState(false)
+  const [clienteADesactivar, setClienteADesactivar] = useState(null)
+
   const [form, setForm] = useState({
     id: "",
     nombre: "",
@@ -42,7 +43,7 @@ function Clientes() {
     cargarClientes()
   }, [token])
 
-  const abrirModal = (cliente) => {
+  const abrirModalEditar = (cliente) => {
     setForm({
       id: cliente.id,
       nombre: cliente.nombre || "",
@@ -54,9 +55,7 @@ function Clientes() {
     setShow(true)
   }
 
-  const cerrarModal = () => {
-    setShow(false)
-  }
+  const cerrarModalEditar = () => setShow(false)
 
   const handleChange = (e) => {
     setForm({
@@ -67,55 +66,62 @@ function Clientes() {
 
   const guardarCambios = async () => {
     try {
-      const response = await fetch(`https://buenaseo.onrender.com/api/usuarios/${form.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(form)
-      })
+      const response = await fetch(
+        `https://buenaseo.onrender.com/api/usuarios/${form.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify(form)
+        }
+      )
 
       if (response.ok) {
-        cargarClientes() // Recargar la lista actualizada
-        cerrarModal()
+        cargarClientes()
+        cerrarModalEditar()
       } else {
         alert("Error al guardar cambios")
       }
     } catch (error) {
-      console.error("Error:", error)
-      alert("Error al guardar cambios")
+      console.error(error)
+      alert("Error de conexión")
     }
   }
 
-  const abrirModalEliminar = (cliente) => {
-    setClienteAEliminar(cliente)
-    setShowDeleteModal(true)
+  // DESACTIVAR
+  const abrirModalDesactivar = (cliente) => {
+    setClienteADesactivar(cliente)
+    setShowDeactivateModal(true)
   }
 
-  const cerrarModalEliminar = () => {
-    setShowDeleteModal(false)
-    setClienteAEliminar(null)
+  const cerrarModalDesactivar = () => {
+    setShowDeactivateModal(false)
+    setClienteADesactivar(null)
   }
 
-  const eliminarCliente = async () => {
+  const desactivarCliente = async () => {
     try {
-      const response = await fetch(`https://buenaseo.onrender.com/api/usuarios/${clienteAEliminar.id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`
+      const response = await fetch(
+        `https://buenaseo.onrender.com/api/usuarios/${clienteADesactivar.id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         }
-      })
+      )
 
       if (response.ok) {
-        cargarClientes() // Recargar la lista
-        cerrarModalEliminar()
+        cargarClientes()
+        cerrarModalDesactivar()
       } else {
-        alert("Error al eliminar cliente")
+        alert("Error al desactivar cliente")
       }
     } catch (error) {
-      console.error("Error:", error)
-      alert("Error al eliminar cliente")
+      console.error(error)
+      alert("Error de conexión")
     }
   }
 
@@ -137,7 +143,9 @@ function Clientes() {
         <tbody>
           {clientes.length === 0 ? (
             <tr>
-              <td colSpan="6" className="text-center">No hay clientes registrados</td>
+              <td colSpan="6" className="text-center">
+                No hay clientes registrados
+              </td>
             </tr>
           ) : (
             clientes.map(cliente => (
@@ -151,17 +159,18 @@ function Clientes() {
                   <Button
                     size="sm"
                     variant="primary"
-                    onClick={() => abrirModal(cliente)}
                     className="me-2"
+                    onClick={() => abrirModalEditar(cliente)}
                   >
                     Editar
                   </Button>
+
                   <Button
                     size="sm"
-                    variant="danger"
-                    onClick={() => abrirModalEliminar(cliente)}
+                    variant="warning"
+                    onClick={() => abrirModalDesactivar(cliente)}
                   >
-                    Eliminar
+                    Desactivar
                   </Button>
                 </td>
               </tr>
@@ -170,8 +179,8 @@ function Clientes() {
         </tbody>
       </Table>
 
-      {/* EDITAR */}
-      <Modal show={show} onHide={cerrarModal}>
+      {/* MODAL EDITAR */}
+      <Modal show={show} onHide={cerrarModalEditar}>
         <Modal.Header closeButton>
           <Modal.Title>Editar cliente</Modal.Title>
         </Modal.Header>
@@ -180,47 +189,27 @@ function Clientes() {
           <Form>
             <Form.Group className="mb-2">
               <Form.Label>Nombre</Form.Label>
-              <Form.Control
-                name="nombre"
-                value={form.nombre}
-                onChange={handleChange}
-              />
+              <Form.Control name="nombre" value={form.nombre} onChange={handleChange} />
             </Form.Group>
 
             <Form.Group className="mb-2">
               <Form.Label>Email</Form.Label>
-              <Form.Control
-                name="email"
-                value={form.email}
-                onChange={handleChange}
-              />
+              <Form.Control name="email" value={form.email} onChange={handleChange} />
             </Form.Group>
 
             <Form.Group className="mb-2">
               <Form.Label>Dirección</Form.Label>
-              <Form.Control
-                name="direccion"
-                value={form.direccion}
-                onChange={handleChange}
-              />
+              <Form.Control name="direccion" value={form.direccion} onChange={handleChange} />
             </Form.Group>
 
             <Form.Group className="mb-2">
               <Form.Label>Teléfono</Form.Label>
-              <Form.Control
-                name="telefono"
-                value={form.telefono}
-                onChange={handleChange}
-              />
+              <Form.Control name="telefono" value={form.telefono} onChange={handleChange} />
             </Form.Group>
 
             <Form.Group className="mb-2">
               <Form.Label>Rol</Form.Label>
-              <Form.Select
-                name="rol"
-                value={form.rol}
-                onChange={handleChange}
-              >
+              <Form.Select name="rol" value={form.rol} onChange={handleChange}>
                 <option value="Cliente">Cliente</option>
                 <option value="Super">Super</option>
               </Form.Select>
@@ -229,7 +218,7 @@ function Clientes() {
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant="secondary" onClick={cerrarModal}>
+          <Button variant="secondary" onClick={cerrarModalEditar}>
             Cancelar
           </Button>
           <Button variant="primary" onClick={guardarCambios}>
@@ -238,25 +227,25 @@ function Clientes() {
         </Modal.Footer>
       </Modal>
 
-      {/* MODAL (Ventana emergente) ELIMINAR */}
-      <Modal show={showDeleteModal} onHide={cerrarModalEliminar}>
+      {/* MODAL DESACTIVAR */}
+      <Modal show={showDeactivateModal} onHide={cerrarModalDesactivar}>
         <Modal.Header closeButton>
-          <Modal.Title>Confirmar eliminación</Modal.Title>
+          <Modal.Title>Confirmar desactivación</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {clienteAEliminar && (
+          {clienteADesactivar && (
             <p>
-              ¿Estás seguro de que deseas eliminar al cliente{" "}
-              <strong>{clienteAEliminar.nombre}</strong> ({clienteAEliminar.email})?
+              ¿Estás seguro de que deseas desactivar al cliente{" "}
+              <strong>{clienteADesactivar.nombre}</strong> ({clienteADesactivar.email})?
             </p>
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={cerrarModalEliminar}>
+          <Button variant="secondary" onClick={cerrarModalDesactivar}>
             Cancelar
           </Button>
-          <Button variant="danger" onClick={eliminarCliente}>
-            Eliminar
+          <Button variant="warning" onClick={desactivarCliente}>
+            Desactivar
           </Button>
         </Modal.Footer>
       </Modal>

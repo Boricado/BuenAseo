@@ -97,7 +97,7 @@ function MisFavoritos() {
                 </Card.Text>
                 
                 <h5 className="text-primary fw-bold mb-3">
-                  ${Number(fav.precio?.toLocaleString("es-CL"))}
+                  ${Number(fav.precio?.toLocaleString("es-CL"))} 
                 </h5>
 
                 {/* BOTONES DE ACCIÓN */}
