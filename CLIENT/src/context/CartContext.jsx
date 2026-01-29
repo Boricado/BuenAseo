@@ -114,6 +114,8 @@ export const CartProvider = ({ children }) => {
       carroItems, 
       setCarroItems, 
       agregarItem, 
+      eliminarItem,
+      cambiarCantidad,
       total,
       cargarCarroDesdeDB 
     }}>
