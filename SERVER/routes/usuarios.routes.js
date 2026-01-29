@@ -8,7 +8,7 @@ const router = express.Router()
 router.get("/", verificarToken, async (req, res) => {
   try {
     const result = await pool.query(
-      "SELECT id, email, nombre, direccion, telefono, rol FROM usuarios"
+      "SELECT id, email, nombre, direccion, telefono, rol FROM usuarios WHERE activo = true"
     )
     res.json({
       ok: true,
