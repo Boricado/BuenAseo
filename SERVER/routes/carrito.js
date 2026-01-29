@@ -70,4 +70,30 @@ router.post("/", verificarToken, async (req, res) => {
   }
 })
 
+// Actualizar cantidad de un item
+router.put("/:id", verificarToken, async (req, res) => {
+  const { cantidad } = req.body
+  const { id } = req.params
+  const usuario_id = req.usuario.id
+
+  if (!cantidad || cantidad < 1) {
+    return res.status(400).json({ error: "Cantidad inválida" })
+  }
+
+  try {
+    await pool.query(
+      `UPDATE carrito
+       SET cantidad = $1
+       WHERE usuario_id = $2 AND item_id = $3`,
+      [cantidad, usuario_id, id]
+    )
+
+    res.json({ ok: true })
+  } catch (error) {
+    console.error("Error actualizando cantidad:", error.message)
+    res.status(500).json({ error: "Error actualizando carrito" })
+  }
+})
+
+
 export default router
