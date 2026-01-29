@@ -78,11 +78,31 @@ export const CartProvider = ({ children }) => {
     }
   }
 
-  // Cambiar Cantidades
-  const cambiarCantidad = (id, nuevaCantidad) => {
+  // Cambiar cantidad
+  const cambiarCantidad = async (id, nuevaCantidad) => {
     if (nuevaCantidad < 1) return
-    setCarroItems(prev => prev.map(i => i.id === id ? { ...i, cantidad: nuevaCantidad } : i))
+
+    const activeToken = localStorage.getItem("token")
+    if (!activeToken) return
+
+    try {
+      const res = await fetch(`https://buenaseo.onrender.com/api/carrito/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${activeToken}`
+        },
+        body: JSON.stringify({ cantidad: nuevaCantidad })
+      })
+
+      if (res.ok) {
+        await cargarCarroDesdeDB()
+      }
+    } catch (error) {
+      console.error("Error actualizando cantidad:", error)
+    }
   }
+
 
   // Actualizar el total
   const total = useMemo(() => {
