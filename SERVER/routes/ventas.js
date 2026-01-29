@@ -29,12 +29,29 @@ router.post("/checkout", verificarToken, async (req, res) => {
 
         // Insertar detalles
         for (const item of items) {
-            const precioUnitario = Math.round(parseFloat(item.precio))
-            await client.query(
-                `INSERT INTO ventas_detalle (venta_id, item_id, cantidad, precio_unitario) 
-                 VALUES ($1, $2, $3, $4)`,
-                [ventaId, item.id, item.cantidad, precioUnitario]
-            );
+          const precioUnitario = Math.round(parseFloat(item.precio))
+
+          // Insertar detalle de venta
+          await client.query(
+            `INSERT INTO ventas_detalle (venta_id, item_id, cantidad, precio_unitario) 
+            VALUES ($1, $2, $3, $4)`,
+            [ventaId, item.id, item.cantidad, precioUnitario]
+          )
+
+          // DESCONTAR STOCK SOLO SI ES PRODUCTO
+          if (item.id.startsWith("PRD")) {
+            const result = await client.query(
+              `UPDATE productos
+              SET stock = stock - $1
+              WHERE id = $2 AND stock >= $1
+              RETURNING stock`,
+              [item.cantidad, item.id]
+            )
+
+            if (result.rowCount === 0) {
+              throw new Error(`Stock insuficiente para el producto ${item.id}`)
+            }
+          }
         }
 
         // Vaciar carrito
